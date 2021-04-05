@@ -8,6 +8,9 @@
 		"strict": true,
 		"watch": true
 	},
+	"files": [
+		"p-u.ts"
+	],
 	"exclude":[
 		"build",
 		"bower_components",

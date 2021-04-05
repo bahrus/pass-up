@@ -11,7 +11,7 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.18",
+    "on-to-me": "0.0.19",
     "pass-down": "0.0.27",
     "xtal-element": "0.0.376"
   },
