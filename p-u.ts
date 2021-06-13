@@ -56,9 +56,25 @@ export class PU extends HTMLElement implements ReactiveSurface{
     parseValAs: 'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined;
 
     /**
+     * A Boolean indicating that events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree.
+    */
+    capture!: boolean;
+
+    /**
      * @private
      */
     previousOn: string | undefined;
+
+    /**
+     * @private
+     */
+    lastEvent: Event | undefined;
+
+    /**
+     * Only act on event if target element css-matches the expression specified by this attribute.
+     * @attr
+     */
+    ifTargetMatches: string | undefined;
       
 
     /**
@@ -86,7 +102,18 @@ export class PU extends HTMLElement implements ReactiveSurface{
         return elementToObserve;
     }
 
+    filterEvent(e: Event) : boolean{
+        return true;
+    }
 
+    //https://web.dev/javascript-this/
+    handleEvent = (e: Event) => {
+        if(this.ifTargetMatches !== undefined){
+            if(!(e.target as HTMLElement).matches(this.ifTargetMatches)) return;
+        }
+        if(!this.filterEvent(e)) return;
+        this.lastEvent = e;
+    }
 }
 
 //TODO:  share common code with p-d.
@@ -138,7 +165,7 @@ const attachEventHandler = ({on, observe, self}: PU) => {
     
 }
 
-const propActions = [attachEventHandler] as PropAction[];
+const propActions = [setInitVal, attachEventHandler] as PropAction[];
 
 const propDefMap: PropDefMap<PU> = {
 

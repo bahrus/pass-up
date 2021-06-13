@@ -10,6 +10,16 @@ export class PU extends HTMLElement {
         this.self = this;
         this.propActions = propActions;
         this.reactor = new xc.Rx(this);
+        //https://web.dev/javascript-this/
+        this.handleEvent = (e) => {
+            if (this.ifTargetMatches !== undefined) {
+                if (!e.target.matches(this.ifTargetMatches))
+                    return;
+            }
+            if (!this.filterEvent(e))
+                return;
+            this.lastEvent = e;
+        };
     }
     connectedCallback() {
         this.style.display = 'none';
@@ -26,6 +36,9 @@ export class PU extends HTMLElement {
         const elementToObserve = getPreviousSib(this.previousElementSibling, this.observe ?? null);
         this._wr = new WeakRef(elementToObserve);
         return elementToObserve;
+    }
+    filterEvent(e) {
+        return true;
     }
 }
 PU.is = 'p-u';
@@ -77,7 +90,7 @@ const attachEventHandler = ({ on, observe, self }) => {
     self.setAttribute('status', '👂');
     self.previousOn = on;
 };
-const propActions = [attachEventHandler];
+const propActions = [setInitVal, attachEventHandler];
 const propDefMap = {};
 const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);
 xc.letThereBeProps(PU, slicedPropDefs, 'onPropChange');
