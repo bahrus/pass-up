@@ -16,11 +16,14 @@ export class PU extends HTMLElement implements ReactiveSurface{
      */
     on: string | undefined;
 
+
     /**
      * css pattern to match for from downstream siblings.
      * @attr
      */
     to: string | undefined;
+
+    toClosest: string | undefined;
 
     /**
      * Name of property to set on matching (downstream) siblings.

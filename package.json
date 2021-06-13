@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "on-to-me": "0.0.23",
-    "pass-down": "0.0.34",
     "xtal-element": "0.0.400"
   },
   "devDependencies": {
