@@ -11,12 +11,12 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.19",
-    "pass-down": "0.0.27",
-    "xtal-element": "0.0.376"
+    "on-to-me": "0.0.23",
+    "pass-down": "0.0.34",
+    "xtal-element": "0.0.400"
   },
   "devDependencies": {
-    "xtal-test": "0.0.50"
+    "xtal-test": "0.0.51"
   },
   "author": "",
   "license": "MIT",

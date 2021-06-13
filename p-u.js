@@ -1,9 +1,8 @@
 import { xc } from 'xtal-element/lib/XtalCore.js';
-import { P } from 'pass-down/p.js';
 /**
  * @element p-u
  */
-export class PU extends P {
+export class PU extends HTMLElement {
     constructor() {
         super(...arguments);
         this.self = this;
@@ -12,7 +11,7 @@ export class PU extends P {
     }
     connectedCallback() {
         this.style.display = 'none';
-        xc.hydrate(this, slicedPropDefs);
+        xc.mergeProps(this, slicedPropDefs);
     }
     onPropChange(n, propDef, nv) {
         this.reactor.addToQueue(propDef, nv);
