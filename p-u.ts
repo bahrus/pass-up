@@ -277,3 +277,15 @@ const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);
 xc.letThereBeProps(PU, slicedPropDefs, 'onPropChange');
 
 xc.define(PU);
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'p-u': PU;
+    }
+}
+
+declare global {
+    interface HTMLElementTagNameMap {
+        'pass-up': PU;
+    }
+}

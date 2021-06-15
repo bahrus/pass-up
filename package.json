@@ -1,10 +1,30 @@
 {
   "name": "pass-up",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description":  "Glue DOM and Custom Elements together.",
+  "keywords": [
+    "webcomponents",
+    "webcomponent",
+    "customelements",
+    "customelement",
+    "bind",
+    "dom-bind"
+  ],
+  "main": "p-u.js",
+  "module": "p-u.js",
+  "exports": {
+    ".": "./p-u.js",
+    "./p-u.js": "./p-u.js"
+  },
+  "files": [
+    "p-u.js",
+    "p-u.ts",
+    "types.d.ts"
+  ],
+  "types": "./types.d.ts",
   "scripts": {
     "test": "node test/test.js",
+    "package-check": "package-check",
     "serve": "node node_modules/xtal-test/serve.js"
   },
   "repository": {
@@ -16,9 +36,10 @@
     "xtal-element": "0.0.400"
   },
   "devDependencies": {
+    "@skypack/package-check": "0.2.2",
     "xtal-test": "0.0.51"
   },
-  "author": "",
+  "author": "anderson.bruce.b@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bahrus/pass-up/issues"
