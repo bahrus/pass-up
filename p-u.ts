@@ -1,6 +1,7 @@
 import {xc, PropAction, PropDef, PropDefMap, ReactiveSurface, IReactor} from 'xtal-element/lib/XtalCore.js';
 import {getPreviousSib, passVal, nudge, getProp, convert} from 'on-to-me/on-to-me.js';
 import { structuralClone } from 'xtal-element/lib/structuralClone.js';
+import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 
 /**
  * @element p-u
@@ -19,15 +20,19 @@ export class PU extends HTMLElement implements ReactiveSurface{
 
 
     /**
-     * css pattern to match for from downstream siblings.
+     * Id of Dom Element.  Uses import-like syntax:
+     * ./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.
+     * ../my-id searches for #my-id one ShadowDOM level up.
+     * /my-id searches from outside any ShadowDOM.
      * @attr
      */
     to: string | undefined;
 
     /**
-     * Pass property to the nearest ancestor element matching this css pattern, using the closest() method. 
+     * Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method. 
+     * Does not pass ourside ShadowDOM realm.
      */
-    toClosest: string | undefined;
+    toNearestUpMatch: string | undefined;
 
     /**
      * Name of property to set on matching (downstream) siblings.
@@ -75,12 +80,22 @@ export class PU extends HTMLElement implements ReactiveSurface{
      * @attr
      */
     ifTargetMatches: string | undefined;
+
+    /**
+     * Don't block event propagation.
+     * @attr
+     */
+    noblock: boolean | undefined;
       
 
     /**
     * @private
     */
     lastVal: any;
+
+    debug!: boolean;
+
+    log!: boolean;
 
     connectedCallback(){
         this.style.display = 'none';
@@ -113,6 +128,23 @@ export class PU extends HTMLElement implements ReactiveSurface{
         }
         if(!this.filterEvent(e)) return;
         this.lastEvent = e;
+    }
+
+    valFromEvent(e: Event){
+        const val = this.val || 'target.value';
+        let valToPass = getProp(e, val.split('.'), this);
+        
+        if(valToPass === undefined){
+            const target = e.target as HTMLElement;
+            const attribVal = target.getAttribute(val);
+            if(attribVal !== null){
+                valToPass = attribVal;
+            }
+        }
+        if(this.parseValAs !== undefined){
+            valToPass = convert(valToPass, this.parseValAs);
+        }
+        return this.cloneVal ? structuralClone(valToPass) :  valToPass;
     }
 }
 
@@ -165,10 +197,74 @@ const attachEventHandler = ({on, observe, self}: PU) => {
     
 }
 
-const propActions = [setInitVal, attachEventHandler] as PropAction[];
+export const handleEvent = ({val, lastEvent, parseValAs, self}: PU) => {
+    if(!lastEvent){
+        debugger;
+    }
+    self.setAttribute('status', '🌩️');
+    if(!self.noblock) lastEvent!.stopPropagation();
+    let valToPass = self.valFromEvent(lastEvent!);
+    self.lastVal = valToPass;
+    //holding on to lastEvent could introduce memory leak
+    delete self.lastEvent;
+    self.setAttribute('status', '👂');
+}
 
+//copied from mut-obs [TODO] share?]
+export function upSearch(el: Element, css: string) {
+    if (css === 'parentElement')
+        return el.parentElement;
+    let upEl = el.previousElementSibling || el.parentElement;
+    while (upEl && !upEl.matches(css)) {
+        upEl = el.previousElementSibling || el.parentElement;
+    }
+    return upEl;
+}
+
+export const handleValChange = ({lastVal, to, toNearestUpMatch, prop, self}: PU) => {
+    if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined)) return;
+    if(self.debug){
+        debugger;
+    }else if(self.log){
+        console.log('passVal', {lastVal, self});
+    }
+    const hSelf = self as HTMLElement;
+    let match: Element | null = null;
+    if(to !== undefined){
+        match = upShadowSearch(self, to);
+    }else if(toNearestUpMatch!== undefined){
+        match = upSearch(self, toNearestUpMatch);
+    }
+    if(match === null) return;
+    (<any>match)[prop!] = lastVal;
+}
+
+const propActions = [onInitVal, attachEventHandler, handleValChange] as PropAction[];
+
+const baseProp: PropDef = {
+    dry: true,
+    async: true,
+};
+const objProp: PropDef = {
+    ...baseProp,
+    type: Object,
+};
+const strProp: PropDef = {
+    ...baseProp,
+    type: String,
+};
+const nnStrProp: PropDef = {
+    ...strProp,
+    stopReactionsIfFalsy: true,
+};
 const propDefMap: PropDefMap<PU> = {
-
+    on: nnStrProp,
+    to: strProp,
+    toNearestUpMatch: strProp,
+    observe: strProp,
+    initVal: nnStrProp,
+    prop: nnStrProp,
+    lastVal: objProp,
 };
 
 const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);
