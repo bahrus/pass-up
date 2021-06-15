@@ -125,7 +125,7 @@ export function upSearch(el, css) {
         return el.parentElement;
     let upEl = el.previousElementSibling || el.parentElement;
     while (upEl && !upEl.matches(css)) {
-        upEl = el.previousElementSibling || el.parentElement;
+        upEl = upEl.previousElementSibling || upEl.parentElement;
     }
     return upEl;
 }
@@ -150,7 +150,7 @@ export const handleValChange = ({ lastVal, to, toNearestUpMatch, prop, self }) =
         return;
     match[prop] = lastVal;
 };
-const propActions = [onInitVal, attachEventHandler, handleValChange];
+const propActions = [onInitVal, attachEventHandler, handleEvent, handleValChange];
 const baseProp = {
     dry: true,
     async: true,
@@ -158,6 +158,10 @@ const baseProp = {
 const objProp = {
     ...baseProp,
     type: Object,
+};
+const nnObjProp = {
+    ...objProp,
+    stopReactionsIfFalsy: true,
 };
 const strProp = {
     ...baseProp,
@@ -175,6 +179,8 @@ const propDefMap = {
     initVal: nnStrProp,
     prop: nnStrProp,
     lastVal: objProp,
+    lastEvent: nnObjProp,
+    val: nnStrProp,
 };
 const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);
 xc.letThereBeProps(PU, slicedPropDefs, 'onPropChange');

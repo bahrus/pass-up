@@ -160,7 +160,6 @@ export const onInitVal = ({initVal, self}: PU) => {
 }
 
 function setInitVal(self: PU, elementToObserve: Element){
-    
     let val = getProp(elementToObserve, self.initVal!.split('.'), self);
     if(val === undefined) return false;
     if(self.parseValAs !== undefined) val = convert(val, self.parseValAs);
@@ -216,7 +215,7 @@ export function upSearch(el: Element, css: string) {
         return el.parentElement;
     let upEl = el.previousElementSibling || el.parentElement;
     while (upEl && !upEl.matches(css)) {
-        upEl = el.previousElementSibling || el.parentElement;
+        upEl = upEl.previousElementSibling || upEl.parentElement;
     }
     return upEl;
 }
@@ -239,7 +238,7 @@ export const handleValChange = ({lastVal, to, toNearestUpMatch, prop, self}: PU)
     (<any>match)[prop!] = lastVal;
 }
 
-const propActions = [onInitVal, attachEventHandler, handleValChange] as PropAction[];
+const propActions = [onInitVal, attachEventHandler, handleEvent, handleValChange] as PropAction[];
 
 const baseProp: PropDef = {
     dry: true,
@@ -249,6 +248,10 @@ const objProp: PropDef = {
     ...baseProp,
     type: Object,
 };
+const nnObjProp: PropDef = {
+    ...objProp,
+    stopReactionsIfFalsy: true,
+}
 const strProp: PropDef = {
     ...baseProp,
     type: String,
@@ -265,6 +268,8 @@ const propDefMap: PropDefMap<PU> = {
     initVal: nnStrProp,
     prop: nnStrProp,
     lastVal: objProp,
+    lastEvent: nnObjProp,
+    val: nnStrProp,
 };
 
 const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);

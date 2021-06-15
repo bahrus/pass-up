@@ -7,27 +7,28 @@
     <title>Document</title>
 </head>
 <body>
+
     <div id=target1></div>
     <div id=firstLine disabled data-why="There was an old lady who swallowed a fly;">I don't know why she swallowed a fly - Perhaps she'll die!</div>
     <p-u on=load to=/target1 prop=textContent init-val=dataset.why></p-u>
-    
-    <!-- <div id=target2></div>
-    <template import as=spider>
-      <div disabled data-spider="There was an old lady who swallowed a spider;"> </div>
-      <p-u on=load to=target2 prop=textContent val=target.dataset.spider></p-u>
-    </template>
-    <div imp-key=spider></div>
+    <div target2 id=target2></div>
+    <div id=thirdLine disabled data-spider="There was an old lady who swallowed a spider;"> </div>
+    <p-u on=click to-nearest-up-match=[target2] prop=textContent val=target.dataset.spider></p-u>
+
 
     <script>
+      setTimeout(() => {
+        thirdLine.click();
+      }, 1000);
       setTimeout(() =>{
-          if(target1.textContent === "I don't know why she swallowed a fly - Perhaps she'll die!"){
-            target1.setAttribute('mark', '')
+          if(target1.textContent === "There was an old lady who swallowed a fly;"){
+            target1.setAttribute('mark', '');
           }
           if(target2.textContent === "There was an old lady who swallowed a spider;"){
             target2.setAttribute('mark', '');
           }
-      }, 3000)
-  </script> -->
+      }, 3000);
+  </script>
     <script type=importmap>
         {
           "imports": {
