@@ -136,6 +136,7 @@ export class PU extends HTMLElement implements ReactiveSurface{
     }
 
     valFromEvent(e: Event){
+        let clearTarget = false;
         const val = this.val || 'target.value';
         let valToPass = getProp(e, val.split('.'), this);
         
@@ -280,7 +281,10 @@ const propDefMap: PropDefMap<PU> = {
     initVal: nnStrProp,
     prop: nnStrProp,
     lastVal: objProp,
-    lastEvent: nnObjProp,
+    lastEvent: {
+        ...nnObjProp,
+        async: false,
+    },
     val: nnStrProp,
 };
 

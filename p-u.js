@@ -111,6 +111,7 @@ export class PU extends HTMLElement {
         this.lastEvent = e;
     };
     valFromEvent(e) {
+        let clearTarget = false;
         const val = this.val || 'target.value';
         let valToPass = getProp(e, val.split('.'), this);
         if (valToPass === undefined) {
@@ -255,7 +256,10 @@ const propDefMap = {
     initVal: nnStrProp,
     prop: nnStrProp,
     lastVal: objProp,
-    lastEvent: nnObjProp,
+    lastEvent: {
+        ...nnObjProp,
+        async: false,
+    },
     val: nnStrProp,
 };
 const slicedPropDefs = xc.getSlicedPropDefs(propDefMap);
