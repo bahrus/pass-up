@@ -199,7 +199,7 @@ export function upSearch(el, css) {
     return upEl;
 }
 export const handleValChange = ({ lastVal, to, toNearestUpMatch, toHost, prop, self }) => {
-    if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined))
+    if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined))
         return;
     if (self.debug) {
         debugger;

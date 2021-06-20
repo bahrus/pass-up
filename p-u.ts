@@ -227,7 +227,7 @@ export function upSearch(el: Element, css: string) {
 }
 
 export const handleValChange = ({lastVal, to, toNearestUpMatch, toHost, prop, self}: PU) => {
-    if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined)) return;
+    if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined)) return;
     if(self.debug){
         debugger;
     }else if(self.log){
