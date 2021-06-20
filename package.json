@@ -1,6 +1,6 @@
 {
   "name": "pass-up",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Glue DOM and Custom Elements together.",
   "keywords": [
     "webcomponents",
