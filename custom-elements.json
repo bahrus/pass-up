@@ -12,6 +12,109 @@
           "name": "PU",
           "members": [
             {
+              "kind": "field",
+              "name": "is",
+              "static": true,
+              "default": "p-u"
+            },
+            {
+              "kind": "field",
+              "name": "self"
+            },
+            {
+              "kind": "field",
+              "name": "propActions"
+            },
+            {
+              "kind": "field",
+              "name": "reactor"
+            },
+            {
+              "kind": "field",
+              "name": "on",
+              "description": "The event name to monitor for, from previous non-petalian element."
+            },
+            {
+              "kind": "field",
+              "name": "to",
+              "description": "Id of Dom Element.  Uses import-like syntax:\n./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.\n../my-id searches for #my-id one ShadowDOM level up.\n/my-id searches from outside any ShadowDOM."
+            },
+            {
+              "kind": "field",
+              "name": "toHost",
+              "description": "Pass property to custom element hosting the contents of p-u element."
+            },
+            {
+              "kind": "field",
+              "name": "toNearestUpMatch",
+              "description": "Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method.\nDoes not pass outside ShadowDOM realm."
+            },
+            {
+              "kind": "field",
+              "name": "prop",
+              "description": "Name of property to set on matching (downstream) siblings."
+            },
+            {
+              "kind": "field",
+              "name": "val",
+              "description": "Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object."
+            },
+            {
+              "kind": "field",
+              "name": "observe",
+              "description": "Specifies element to latch on to, and listen for events.\nSearches previous siblings, parent, previous siblings of parent, etc.\nStops at Shadow DOM boundary."
+            },
+            {
+              "kind": "field",
+              "name": "initVal"
+            },
+            {
+              "kind": "field",
+              "name": "cloneVal"
+            },
+            {
+              "kind": "field",
+              "name": "parseValAs"
+            },
+            {
+              "kind": "field",
+              "name": "capture",
+              "description": "A Boolean indicating that events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree."
+            },
+            {
+              "kind": "field",
+              "name": "previousOn",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "lastEvent",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "ifTargetMatches",
+              "description": "Only act on event if target element css-matches the expression specified by this attribute."
+            },
+            {
+              "kind": "field",
+              "name": "noblock",
+              "description": "Don't block event propagation."
+            },
+            {
+              "kind": "field",
+              "name": "lastVal",
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "debug"
+            },
+            {
+              "kind": "field",
+              "name": "log"
+            },
+            {
               "kind": "method",
               "name": "onPropChange",
               "parameters": [
@@ -28,6 +131,10 @@
             },
             {
               "kind": "field",
+              "name": "_wr"
+            },
+            {
+              "kind": "field",
               "name": "observedElement"
             },
             {
@@ -40,6 +147,10 @@
               ]
             },
             {
+              "kind": "field",
+              "name": "handleEvent"
+            },
+            {
               "kind": "method",
               "name": "valFromEvent",
               "parameters": [
@@ -47,6 +158,43 @@
                   "name": "e"
                 }
               ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "on",
+              "description": "The event name to monitor for, from previous non-petalian element.",
+              "fieldName": "on"
+            },
+            {
+              "name": "to",
+              "description": "Id of Dom Element.  Uses import-like syntax:\n./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.\n../my-id searches for #my-id one ShadowDOM level up.\n/my-id searches from outside any ShadowDOM.",
+              "fieldName": "to"
+            },
+            {
+              "name": "prop",
+              "description": "Name of property to set on matching (downstream) siblings.",
+              "fieldName": "prop"
+            },
+            {
+              "name": "val",
+              "description": "Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object.",
+              "fieldName": "val"
+            },
+            {
+              "name": "observe",
+              "description": "Specifies element to latch on to, and listen for events.\nSearches previous siblings, parent, previous siblings of parent, etc.\nStops at Shadow DOM boundary.",
+              "fieldName": "observe"
+            },
+            {
+              "name": "ifTargetMatches",
+              "description": "Only act on event if target element css-matches the expression specified by this attribute.",
+              "fieldName": "ifTargetMatches"
+            },
+            {
+              "name": "noblock",
+              "description": "Don't block event propagation.",
+              "fieldName": "noblock"
             }
           ],
           "superclass": {
@@ -90,7 +238,7 @@
           "name": "handleValChange",
           "parameters": [
             {
-              "name": "{ lastVal, to, toNearestUpMatch, prop, self }"
+              "name": "{ lastVal, to, toNearestUpMatch, toHost, prop, self }"
             }
           ]
         }
@@ -189,7 +337,8 @@
               "name": "toHost",
               "type": {
                 "text": "boolean | undefined"
-              }
+              },
+              "description": "Pass property to custom element hosting the contents of p-u element."
             },
             {
               "kind": "field",
@@ -486,7 +635,7 @@
           "name": "handleValChange",
           "parameters": [
             {
-              "name": "{lastVal, to, toNearestUpMatch, prop, self}",
+              "name": "{lastVal, to, toNearestUpMatch, toHost, prop, self}",
               "type": {
                 "text": "PU"
               }

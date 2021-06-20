@@ -6,22 +6,80 @@ import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
  * @element p-u
  */
 export class PU extends HTMLElement {
-    constructor() {
-        super(...arguments);
-        this.self = this;
-        this.propActions = propActions;
-        this.reactor = new xc.Rx(this);
-        //https://web.dev/javascript-this/
-        this.handleEvent = (e) => {
-            if (this.ifTargetMatches !== undefined) {
-                if (!e.target.matches(this.ifTargetMatches))
-                    return;
-            }
-            if (!this.filterEvent(e))
-                return;
-            this.lastEvent = e;
-        };
-    }
+    static is = 'p-u';
+    self = this;
+    propActions = propActions;
+    reactor = new xc.Rx(this);
+    /**
+     * The event name to monitor for, from previous non-petalian element.
+     * @attr
+     */
+    on;
+    /**
+     * Id of Dom Element.  Uses import-like syntax:
+     * ./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.
+     * ../my-id searches for #my-id one ShadowDOM level up.
+     * /my-id searches from outside any ShadowDOM.
+     * @attr
+     */
+    to;
+    /**
+     * Pass property to custom element hosting the contents of p-u element.
+     */
+    toHost;
+    /**
+     * Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method.
+     * Does not pass outside ShadowDOM realm.
+     */
+    toNearestUpMatch;
+    /**
+     * Name of property to set on matching (downstream) siblings.
+     * @attr
+     */
+    prop;
+    /**
+     * Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object.
+     * @attr
+     */
+    val;
+    /**
+     * Specifies element to latch on to, and listen for events.
+     * Searches previous siblings, parent, previous siblings of parent, etc.
+     * Stops at Shadow DOM boundary.
+     * @attr
+     */
+    observe;
+    initVal;
+    cloneVal;
+    parseValAs;
+    /**
+     * A Boolean indicating that events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree.
+    */
+    capture;
+    /**
+     * @private
+     */
+    previousOn;
+    /**
+     * @private
+     */
+    lastEvent;
+    /**
+     * Only act on event if target element css-matches the expression specified by this attribute.
+     * @attr
+     */
+    ifTargetMatches;
+    /**
+     * Don't block event propagation.
+     * @attr
+     */
+    noblock;
+    /**
+    * @private
+    */
+    lastVal;
+    debug;
+    log;
     connectedCallback() {
         this.style.display = 'none';
         xc.mergeProps(this, slicedPropDefs);
@@ -29,6 +87,7 @@ export class PU extends HTMLElement {
     onPropChange(n, propDef, nv) {
         this.reactor.addToQueue(propDef, nv);
     }
+    _wr;
     get observedElement() {
         const element = this._wr?.deref();
         if (element !== undefined) {
@@ -41,6 +100,16 @@ export class PU extends HTMLElement {
     filterEvent(e) {
         return true;
     }
+    //https://web.dev/javascript-this/
+    handleEvent = (e) => {
+        if (this.ifTargetMatches !== undefined) {
+            if (!e.target.matches(this.ifTargetMatches))
+                return;
+        }
+        if (!this.filterEvent(e))
+            return;
+        this.lastEvent = e;
+    };
     valFromEvent(e) {
         const val = this.val || 'target.value';
         let valToPass = getProp(e, val.split('.'), this);
@@ -57,7 +126,6 @@ export class PU extends HTMLElement {
         return this.cloneVal ? structuralClone(valToPass) : valToPass;
     }
 }
-PU.is = 'p-u';
 //TODO:  share common code with p-d.
 export const onInitVal = ({ initVal, self }) => {
     const elementToObserve = self.observedElement;
@@ -129,7 +197,7 @@ export function upSearch(el, css) {
     }
     return upEl;
 }
-export const handleValChange = ({ lastVal, to, toNearestUpMatch, prop, self }) => {
+export const handleValChange = ({ lastVal, to, toNearestUpMatch, toHost, prop, self }) => {
     if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined))
         return;
     if (self.debug) {
@@ -145,6 +213,9 @@ export const handleValChange = ({ lastVal, to, toNearestUpMatch, prop, self }) =
     }
     else if (toNearestUpMatch !== undefined) {
         match = upSearch(self, toNearestUpMatch);
+    }
+    else if (toHost) {
+        match = self.getRootNode().host;
     }
     if (match === null)
         return;
@@ -167,6 +238,10 @@ const strProp = {
     ...baseProp,
     type: String,
 };
+const boolProp = {
+    ...baseProp,
+    type: Boolean,
+};
 const nnStrProp = {
     ...strProp,
     stopReactionsIfFalsy: true,
@@ -175,6 +250,7 @@ const propDefMap = {
     on: nnStrProp,
     to: strProp,
     toNearestUpMatch: strProp,
+    toHost: boolProp,
     observe: strProp,
     initVal: nnStrProp,
     prop: nnStrProp,

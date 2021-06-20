@@ -28,6 +28,9 @@ export class PU extends HTMLElement implements ReactiveSurface{
      */
     to: string | undefined;
 
+    /**
+     * Pass property to custom element hosting the contents of p-u element.
+     */
     toHost: boolean | undefined;
 
     /**
@@ -222,7 +225,7 @@ export function upSearch(el: Element, css: string) {
     return upEl;
 }
 
-export const handleValChange = ({lastVal, to, toNearestUpMatch, prop, self}: PU) => {
+export const handleValChange = ({lastVal, to, toNearestUpMatch, toHost, prop, self}: PU) => {
     if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined)) return;
     if(self.debug){
         debugger;
@@ -235,6 +238,8 @@ export const handleValChange = ({lastVal, to, toNearestUpMatch, prop, self}: PU)
         match = upShadowSearch(self, to);
     }else if(toNearestUpMatch!== undefined){
         match = upSearch(self, toNearestUpMatch);
+    }else if(toHost){
+        match = (<any>self.getRootNode()).host;
     }
     if(match === null) return;
     (<any>match)[prop!] = lastVal;
@@ -258,6 +263,10 @@ const strProp: PropDef = {
     ...baseProp,
     type: String,
 };
+const boolProp: PropDef = {
+    ...baseProp,
+    type: Boolean,
+};
 const nnStrProp: PropDef = {
     ...strProp,
     stopReactionsIfFalsy: true,
@@ -266,6 +275,7 @@ const propDefMap: PropDefMap<PU> = {
     on: nnStrProp,
     to: strProp,
     toNearestUpMatch: strProp,
+    toHost: boolProp,
     observe: strProp,
     initVal: nnStrProp,
     prop: nnStrProp,

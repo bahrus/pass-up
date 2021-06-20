@@ -19,7 +19,8 @@
   "files": [
     "p-u.js",
     "p-u.ts",
-    "types.d.ts"
+    "types.d.ts",
+    "custom-elements.json"
   ],
   "types": "./types.d.ts",
   "scripts": {
