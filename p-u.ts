@@ -28,9 +28,11 @@ export class PU extends HTMLElement implements ReactiveSurface{
      */
     to: string | undefined;
 
+    toHost: boolean | undefined;
+
     /**
      * Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method. 
-     * Does not pass ourside ShadowDOM realm.
+     * Does not pass outside ShadowDOM realm.
      */
     toNearestUpMatch: string | undefined;
 

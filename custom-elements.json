@@ -1,0 +1,553 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "p-u.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PU",
+          "members": [
+            {
+              "kind": "method",
+              "name": "onPropChange",
+              "parameters": [
+                {
+                  "name": "n"
+                },
+                {
+                  "name": "propDef"
+                },
+                {
+                  "name": "nv"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "observedElement"
+            },
+            {
+              "kind": "method",
+              "name": "filterEvent",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "valFromEvent",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "p-u",
+          "customElement": true
+        },
+        {
+          "kind": "function",
+          "name": "onInitVal",
+          "parameters": [
+            {
+              "name": "{ initVal, self }"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "handleEvent",
+          "parameters": [
+            {
+              "name": "{ val, lastEvent, parseValAs, self }"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "upSearch",
+          "parameters": [
+            {
+              "name": "el"
+            },
+            {
+              "name": "css"
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "handleValChange",
+          "parameters": [
+            {
+              "name": "{ lastVal, to, toNearestUpMatch, prop, self }"
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PU",
+          "declaration": {
+            "name": "PU",
+            "module": "p-u.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "onInitVal",
+          "declaration": {
+            "name": "onInitVal",
+            "module": "p-u.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "handleEvent",
+          "declaration": {
+            "name": "handleEvent",
+            "module": "p-u.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "upSearch",
+          "declaration": {
+            "name": "upSearch",
+            "module": "p-u.js"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "handleValChange",
+          "declaration": {
+            "name": "handleValChange",
+            "module": "p-u.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "p-u.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "PU",
+          "members": [
+            {
+              "kind": "field",
+              "name": "is",
+              "static": true,
+              "default": "p-u"
+            },
+            {
+              "kind": "field",
+              "name": "self"
+            },
+            {
+              "kind": "field",
+              "name": "propActions"
+            },
+            {
+              "kind": "field",
+              "name": "reactor",
+              "type": {
+                "text": "IReactor"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "on",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The event name to monitor for, from previous non-petalian element."
+            },
+            {
+              "kind": "field",
+              "name": "to",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Id of Dom Element.  Uses import-like syntax:\r\n./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.\r\n../my-id searches for #my-id one ShadowDOM level up.\r\n/my-id searches from outside any ShadowDOM."
+            },
+            {
+              "kind": "field",
+              "name": "toHost",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "toNearestUpMatch",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method. \r\nDoes not pass outside ShadowDOM realm."
+            },
+            {
+              "kind": "field",
+              "name": "prop",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name of property to set on matching (downstream) siblings."
+            },
+            {
+              "kind": "field",
+              "name": "val",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object."
+            },
+            {
+              "kind": "field",
+              "name": "observe",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Specifies element to latch on to, and listen for events.\r\nSearches previous siblings, parent, previous siblings of parent, etc.\r\nStops at Shadow DOM boundary."
+            },
+            {
+              "kind": "field",
+              "name": "initVal",
+              "type": {
+                "text": "string | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "cloneVal",
+              "type": {
+                "text": "boolean | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "parseValAs",
+              "type": {
+                "text": "'int' | 'float' | 'bool' | 'date' | 'truthy' | 'falsy' | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "capture",
+              "type": {
+                "text": "boolean"
+              },
+              "description": "A Boolean indicating that events of this type will be dispatched to the registered listener before being dispatched to any EventTarget beneath it in the DOM tree."
+            },
+            {
+              "kind": "field",
+              "name": "previousOn",
+              "type": {
+                "text": "string | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "lastEvent",
+              "type": {
+                "text": "Event | undefined"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "ifTargetMatches",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Only act on event if target element css-matches the expression specified by this attribute."
+            },
+            {
+              "kind": "field",
+              "name": "noblock",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "description": "Don't block event propagation."
+            },
+            {
+              "kind": "field",
+              "name": "lastVal",
+              "type": {
+                "text": "any"
+              },
+              "privacy": "private"
+            },
+            {
+              "kind": "field",
+              "name": "debug",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "log",
+              "type": {
+                "text": "boolean"
+              }
+            },
+            {
+              "kind": "method",
+              "name": "onPropChange",
+              "parameters": [
+                {
+                  "name": "n",
+                  "type": {
+                    "text": "string"
+                  }
+                },
+                {
+                  "name": "propDef",
+                  "type": {
+                    "text": "PropDef"
+                  }
+                },
+                {
+                  "name": "nv",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "_wr",
+              "type": {
+                "text": "WeakRef<Element> | undefined"
+              }
+            },
+            {
+              "kind": "field",
+              "name": "observedElement"
+            },
+            {
+              "kind": "method",
+              "name": "filterEvent",
+              "return": {
+                "type": {
+                  "text": "boolean"
+                }
+              },
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "handleEvent"
+            },
+            {
+              "kind": "method",
+              "name": "valFromEvent",
+              "parameters": [
+                {
+                  "name": "e",
+                  "type": {
+                    "text": "Event"
+                  }
+                }
+              ]
+            }
+          ],
+          "attributes": [
+            {
+              "name": "on",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "The event name to monitor for, from previous non-petalian element.",
+              "fieldName": "on"
+            },
+            {
+              "name": "to",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Id of Dom Element.  Uses import-like syntax:\r\n./my-id searches for #my-id within ShadowDOM realm of pass-up (p-u) instance.\r\n../my-id searches for #my-id one ShadowDOM level up.\r\n/my-id searches from outside any ShadowDOM.",
+              "fieldName": "to"
+            },
+            {
+              "name": "prop",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Name of property to set on matching (downstream) siblings.",
+              "fieldName": "prop"
+            },
+            {
+              "name": "val",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object.",
+              "fieldName": "val"
+            },
+            {
+              "name": "observe",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Specifies element to latch on to, and listen for events.\r\nSearches previous siblings, parent, previous siblings of parent, etc.\r\nStops at Shadow DOM boundary.",
+              "fieldName": "observe"
+            },
+            {
+              "name": "ifTargetMatches",
+              "type": {
+                "text": "string | undefined"
+              },
+              "description": "Only act on event if target element css-matches the expression specified by this attribute.",
+              "fieldName": "ifTargetMatches"
+            },
+            {
+              "name": "noblock",
+              "type": {
+                "text": "boolean | undefined"
+              },
+              "description": "Don't block event propagation.",
+              "fieldName": "noblock"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "tagName": "p-u",
+          "customElement": true
+        },
+        {
+          "kind": "function",
+          "name": "onInitVal",
+          "parameters": [
+            {
+              "name": "{initVal, self}",
+              "type": {
+                "text": "PU"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "handleEvent",
+          "parameters": [
+            {
+              "name": "{val, lastEvent, parseValAs, self}",
+              "type": {
+                "text": "PU"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "upSearch",
+          "parameters": [
+            {
+              "name": "el",
+              "type": {
+                "text": "Element"
+              }
+            },
+            {
+              "name": "css",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        },
+        {
+          "kind": "function",
+          "name": "handleValChange",
+          "parameters": [
+            {
+              "name": "{lastVal, to, toNearestUpMatch, prop, self}",
+              "type": {
+                "text": "PU"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "PU",
+          "declaration": {
+            "name": "PU",
+            "module": "p-u.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "onInitVal",
+          "declaration": {
+            "name": "onInitVal",
+            "module": "p-u.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "handleEvent",
+          "declaration": {
+            "name": "handleEvent",
+            "module": "p-u.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "upSearch",
+          "declaration": {
+            "name": "upSearch",
+            "module": "p-u.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "handleValChange",
+          "declaration": {
+            "name": "handleValChange",
+            "module": "p-u.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "types.d.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "test/test.js",
+      "declarations": [],
+      "exports": []
+    }
+  ]
+}

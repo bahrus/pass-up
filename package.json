@@ -25,7 +25,8 @@
   "scripts": {
     "test": "node test/test.js",
     "package-check": "package-check",
-    "serve": "node node_modules/xtal-test/serve.js"
+    "serve": "node node_modules/xtal-test/serve.js",
+    "doc": "custom-elements-manifest analyze"
   },
   "repository": {
     "type": "git",
@@ -37,12 +38,14 @@
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
-    "xtal-test": "0.0.51"
+    "xtal-test": "0.0.51",
+    "@custom-elements-manifest/analyzer": "0.3.1"
   },
   "author": "anderson.bruce.b@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/bahrus/pass-up/issues"
   },
-  "homepage": "https://github.com/bahrus/pass-up#readme"
+  "homepage": "https://github.com/bahrus/pass-up#readme",
+  "customElements": "custom-elements.json"
 }
