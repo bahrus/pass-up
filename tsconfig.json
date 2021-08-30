@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
-		"target": "esnext",
-		"module":"esnext",
+		"target": "ESNext",
+		"module":"ESNext",
 		"sourceMap": false,
 		"experimentalDecorators": true,
 		"newLine": "LF",
@@ -9,7 +9,8 @@
 		"watch": true
 	},
 	"files": [
-		"p-u.ts"
+		"pass-up.ts",
+		"p-u.ts",
 	],
 	"exclude":[
 		"build",

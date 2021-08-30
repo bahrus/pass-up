@@ -10,15 +10,15 @@
     "bind",
     "dom-bind"
   ],
-  "main": "p-u.js",
-  "module": "p-u.js",
+  "main": "pass-up.js",
+  "module": "pass-up.js",
   "exports": {
     ".": "./p-u.js",
     "./p-u.js": "./p-u.js"
   },
   "files": [
-    "p-u.js",
-    "p-u.ts",
+    "p*.js",
+    "p*.ts",
     "types.d.ts",
     "custom-elements.json"
   ],
@@ -34,13 +34,14 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.23",
-    "xtal-element": "0.0.402"
+    "on-to-me": "0.0.35",
+    "xtal-element": "0.0.437",
+    "trans-render": "0.0.357"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
     "xtal-test": "0.0.51",
-    "@custom-elements-manifest/analyzer": "0.3.5"
+    "@custom-elements-manifest/analyzer": "0.4.11"
   },
   "author": "anderson.bruce.b@gmail.com",
   "license": "MIT",
