@@ -35,8 +35,8 @@
   },
   "dependencies": {
     "on-to-me": "0.0.35",
-    "xtal-element": "0.0.437",
-    "trans-render": "0.0.357"
+    "xtal-element": "0.0.439",
+    "trans-render": "0.0.383"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
