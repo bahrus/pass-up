@@ -117,8 +117,11 @@ export class PUCore extends HTMLElement {
         }
         if (match === null)
             return;
-        match[prop] = lastVal;
+        this.doSet(match, prop, lastVal);
     };
+    doSet(match, prop, lastVal) {
+        match[prop] = lastVal;
+    }
 }
 const strProp = {
     type: 'String'

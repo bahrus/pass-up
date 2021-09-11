@@ -118,7 +118,12 @@ export class PUCore extends HTMLElement implements PUActions{
             match = (<any>(this.getRootNode())).host;
         }
         if(match === null) return;
-        (<any>match)[prop!] = lastVal;
+        this.doSet(match, prop!, lastVal);
+        
+    }
+
+    doSet(match: any, prop: string, lastVal: any){
+        match[prop] = lastVal;
     }
 }
 
