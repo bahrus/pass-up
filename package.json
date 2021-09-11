@@ -35,13 +35,13 @@
   },
   "dependencies": {
     "on-to-me": "0.0.35",
-    "xtal-element": "0.0.439",
-    "trans-render": "0.0.383"
+    "xtal-element": "0.0.442",
+    "trans-render": "0.0.401"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
     "xtal-test": "0.0.51",
-    "@custom-elements-manifest/analyzer": "0.4.11"
+    "@custom-elements-manifest/analyzer": "0.5.3"
   },
   "author": "anderson.bruce.b@gmail.com",
   "license": "MIT",
