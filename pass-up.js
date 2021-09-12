@@ -55,7 +55,6 @@ export class PUCore extends HTMLElement {
         let valToPass = this.valFromEvent(lastEvent);
         this.lastVal = valToPass;
         //holding on to lastEvent could introduce memory leak
-        delete this.lastEvent;
         this.setAttribute('status', '👂');
     }
     //TODO:  share common code with pass-down
@@ -141,6 +140,7 @@ export class PUCore extends HTMLElement {
         const initVal = valFromTarget === '' ? 'value' : valFromTarget;
         const val = 'target.' + initVal;
         const on = this.onFromProp(initVal);
+        this.lastEvent = undefined;
         return { on, val, initVal };
     }
     ;

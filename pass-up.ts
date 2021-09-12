@@ -59,7 +59,7 @@ export class PUCore extends HTMLElement implements PUActions{
         let valToPass = this.valFromEvent(lastEvent!);
         this.lastVal = valToPass;
         //holding on to lastEvent could introduce memory leak
-        delete this.lastEvent;
+        
         this.setAttribute('status', '👂');
     }
 
@@ -144,6 +144,7 @@ export class PUCore extends HTMLElement implements PUActions{
         const initVal = valFromTarget === '' ? 'value' : valFromTarget!;
         const val = 'target.' + initVal;
         const on = this.onFromProp(initVal);
+        this.lastEvent = undefined;
         return {on, val, initVal};
     };
 
