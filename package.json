@@ -3,17 +3,18 @@
   "version": "0.0.11",
   "description": "Glue DOM and Custom Elements together.",
   "keywords": [
-    "webcomponents",
-    "webcomponent",
-    "customelements",
-    "customelement",
+    "webc omponents",
+    "web component",
+    "custom elements",
+    "custom element",
     "bind",
     "dom-bind"
   ],
   "main": "pass-up.js",
   "module": "pass-up.js",
   "exports": {
-    ".": "./p-u.js",
+    ".": "./pass-up.js",
+    "./pass-up.js": "./pass-up.js",
     "./p-u.js": "./p-u.js"
   },
   "files": [
