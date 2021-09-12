@@ -142,6 +142,10 @@ const ce = new CE<PUProps, PUActions>({
             on: strProp, to: strProp, toNearestUpMatch: strProp,
             prop: strProp, val: strProp, observe: strProp, initVal: strProp,
             parseValAs: strProp, previousOn: strProp, ifTargetMatches: strProp,
+            lastVal:{
+                parse: false,
+                dry: false,
+            }
         },
         actions:{
             doEvent:{
