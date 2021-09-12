@@ -21,6 +21,22 @@ p-u is one member of the [family of web components](https://github.com/bahrus/p-
 <p-u on=click to-nearest-up-match=[target2] prop=textContent val=target.dataset.spider></p-u>
 ```
 
+## Import Maps
+
+If using a static file web server with no bundling, the following entries are required in your import map:
+
+```html
+<script type=importmap>
+    {
+        "imports": {
+        "xtal-element/": "../node_modules/xtal-element/",
+        "trans-render/": "../node_modules/trans-render/",
+        "on-to-me/": "../node_modules/on-to-me/"
+        }
+    }
+</script>
+```
+
 ## Viewing Your Element
 
 To view this element locally:

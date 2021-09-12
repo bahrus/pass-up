@@ -1,7 +1,7 @@
 import { CE } from 'trans-render/lib/CE.js';
 import { upSearch } from 'trans-render/lib/upSearch.js';
 import { getPreviousSib, nudge, getProp, convert } from 'on-to-me/on-to-me.js';
-import { structuralClone } from 'xtal-element/lib/structuralClone.js';
+import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 const ce = new CE();
 /**

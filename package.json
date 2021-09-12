@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "on-to-me": "0.0.35",
-    "xtal-element": "0.0.442",
     "trans-render": "0.0.401"
   },
   "devDependencies": {
