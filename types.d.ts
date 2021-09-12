@@ -87,6 +87,11 @@ export interface PUProps{
     debug?: boolean;
 
     log?: boolean;
+
+    
+    valFromTarget?: string;
+
+    vft?: string;
 }
 
 export interface PUActions{
@@ -95,4 +100,6 @@ export interface PUActions{
     attachEventHandler(self: this): void;
     handleValChange(self: this): void;
     doSet(match: any, prop: string, lastVal: any): void;
+    setAliases(self: this): void;
+    setValFromTarget(self: this): void;
 }

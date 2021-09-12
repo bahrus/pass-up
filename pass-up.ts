@@ -5,6 +5,7 @@ import { structuralClone } from 'xtal-element/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 import {PUActions, PUProps} from './types';
 
+const ce = new CE<PUProps, PUActions>();
 /**
  * @element p-u
  * @tag p-u
@@ -65,7 +66,7 @@ export class PUCore extends HTMLElement implements PUActions{
     //TODO:  share common code with pass-down
     doInit({initVal, observedElement}: this){
         const elementToObserve = observedElement;
-        const foundInitVal = setInitVal(this, elementToObserve);
+        const foundInitVal = this.setInitVal(this, elementToObserve);
         // if(!foundInitVal && self.initEvent!== undefined){
         //     elementToObserve.addEventListener(self.initEvent, e => {
         //         setInitVal(self, elementToObserve);
@@ -125,13 +126,39 @@ export class PUCore extends HTMLElement implements PUActions{
     doSet(match: any, prop: string, lastVal: any){
         match[prop] = lastVal;
     }
+
+    setInitVal({initVal, parseValAs, cloneVal}: this, elementToObserve: Element){
+        let val = getProp(elementToObserve, initVal!.split('.'), this);
+        if(val === undefined) return false;
+        if(parseValAs !== undefined) val = convert(val, parseValAs);
+        if(cloneVal) val = structuralClone(val);
+        this.lastVal = val;
+        return true;
+    }
+
+    onFromProp(initVal: string){
+        return this.on === undefined ? ce.toLisp(initVal) + '-changed': this.on;
+    }
+
+    setValFromTarget({valFromTarget}: this){
+        const initVal = valFromTarget === '' ? 'value' : valFromTarget!;
+        const val = 'target.' + initVal;
+        const on = this.onFromProp(initVal);
+        return {on, val, initVal};
+    };
+
+    setAliases({vft}: this){
+        return {
+            valFromTarget: vft
+        }
+    }
 }
 
 export interface PUCore extends PUProps{}
 const strProp: PropInfo ={
     type: 'String'
 }
-const ce = new CE<PUProps, PUActions>({
+ce.def({
     config:{
         tagName: 'p-u',
         propDefaults:{
@@ -145,7 +172,9 @@ const ce = new CE<PUProps, PUActions>({
             lastVal:{
                 parse: false,
                 dry: false,
-            }
+            },
+            valFromTarget: strProp,
+            vft: strProp,
         },
         actions:{
             doEvent:{
@@ -160,6 +189,12 @@ const ce = new CE<PUProps, PUActions>({
             },
             handleValChange:{
                 ifAllOf:['lastVal', 'prop']
+            },
+            setValFromTarget:{
+                ifAllOf: ['valFromTarget'],
+            },
+            setAliases: {
+                ifAllOf: ['vft'],
             }
         },
         style:{
@@ -171,14 +206,7 @@ const ce = new CE<PUProps, PUActions>({
 
 export const PassUp = ce.classDef!;
 
-function setInitVal(self: PUCore, elementToObserve: Element){
-    let val = getProp(elementToObserve, self.initVal!.split('.'), self);
-    if(val === undefined) return false;
-    if(self.parseValAs !== undefined) val = convert(val, self.parseValAs);
-    if(self.cloneVal) val = structuralClone(val);
-    self.lastVal = val;
-    return true;
-}
+
 
 
 declare global {
