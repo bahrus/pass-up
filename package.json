@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "on-to-me": "0.0.35",
-    "trans-render": "0.0.401"
+    "trans-render": "0.0.402"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
