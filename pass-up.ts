@@ -1,6 +1,6 @@
 import {CE, PropInfo} from 'trans-render/lib/CE.js';
 import {upSearch} from 'trans-render/lib/upSearch.js';
-import {getPreviousSib, passVal, nudge, getProp, convert} from 'on-to-me/on-to-me.js';
+import {getProp, convert} from 'on-to-me/on-to-me.js';
 import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 import {PUActions, PUProps} from './types';
@@ -35,7 +35,7 @@ export class PUCore extends HTMLElement implements PUActions{
 
     doEvent({lastEvent, noblock}: this) {
         this.setAttribute('status', '🌩️');
-        if(!this.noblock) lastEvent!.stopPropagation();
+        if(!noblock) lastEvent!.stopPropagation();
         let valToPass = this.valFromEvent(lastEvent!);
         this.lastVal = valToPass;
         //holding on to lastEvent could introduce memory leak

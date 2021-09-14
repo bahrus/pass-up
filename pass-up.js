@@ -28,7 +28,7 @@ export class PUCore extends HTMLElement {
     }
     doEvent({ lastEvent, noblock }) {
         this.setAttribute('status', '🌩️');
-        if (!this.noblock)
+        if (!noblock)
             lastEvent.stopPropagation();
         let valToPass = this.valFromEvent(lastEvent);
         this.lastVal = valToPass;
