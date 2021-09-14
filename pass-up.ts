@@ -4,36 +4,16 @@ import {getPreviousSib, passVal, nudge, getProp, convert} from 'on-to-me/on-to-m
 import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 import {PUActions, PUProps} from './types';
+import {OnMixin} from 'on-to-me/on-mixin.js';
+import {OnMixinActions, OnMixinProps} from 'on-to-me/types';
 
-const ce = new CE<PUProps, PUActions>();
+const ce = new CE<PUProps & OnMixinProps, PUActions & OnMixinActions>();
 /**
  * @element p-u
  * @tag p-u
  */
 export class PUCore extends HTMLElement implements PUActions{
-    #wr: WeakRef<Element> | undefined;
-    get observedElement(){
-        const element = this.#wr?.deref();
-        if(element !== undefined){
-            return element;
-        }
-        const elementToObserve = getPreviousSib(this.previousElementSibling as HTMLElement, this.observe ?? null) as Element;
-        this.#wr = new WeakRef(elementToObserve);
-        return elementToObserve;
-    }
 
-    filterEvent(e: Event) : boolean{
-        return true;
-    }
-
-    //https://web.dev/javascript-this/
-    handleEvent = (e: Event) => {
-        if(this.ifTargetMatches !== undefined){
-            if(!(e.target as HTMLElement).matches(this.ifTargetMatches)) return;
-        }
-        if(!this.filterEvent(e)) return;
-        this.lastEvent = e;
-    }
 
     valFromEvent(e: Event){
         let clearTarget = false;
@@ -66,7 +46,7 @@ export class PUCore extends HTMLElement implements PUActions{
     //TODO:  share common code with pass-down
     doInit({initVal, observedElement}: this){
         const elementToObserve = observedElement;
-        const foundInitVal = this.setInitVal(this, elementToObserve);
+        const foundInitVal = this.setInitVal(this, elementToObserve!);
         // if(!foundInitVal && self.initEvent!== undefined){
         //     elementToObserve.addEventListener(self.initEvent, e => {
         //         setInitVal(self, elementToObserve);
@@ -74,33 +54,7 @@ export class PUCore extends HTMLElement implements PUActions{
         // }
     }
 
-    //TODO:  share common code with pass-down
-    attachEventHandler({on, observe, observedElement, parentElement, ifTargetMatches, previousOn, handleEvent, capture}: this){
-        const previousElementToObserve = this.#wr?.deref();
-        this.#wr = undefined;
-        const elementToObserve = this.observedElement;
-        if(!elementToObserve) throw "Could not locate element to observe.";
-        let doNudge = false;
-        if((previousElementToObserve !== undefined) && (previousOn !== undefined || (previousElementToObserve !== elementToObserve))){
-            previousElementToObserve.removeEventListener(previousOn || on!, handleEvent);
-        }else{
-            doNudge = true;
-        }
-        elementToObserve.addEventListener(on!, handleEvent, {capture: capture});
-        if(doNudge){
-            if(elementToObserve === parentElement && ifTargetMatches){
-                elementToObserve.querySelectorAll(ifTargetMatches).forEach(publisher =>{
-                    nudge(publisher);
-                });
-            }else{
-                nudge(elementToObserve);
-            }
-            
-        }
-        this.setAttribute('status', '👂');
-        this.previousOn = on;
-        
-    }
+
     
     handleValChange = ({lastVal, to, toNearestUpMatch, toHost, prop, debug, log}: this) => {
         if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined)) return;
@@ -154,8 +108,8 @@ export class PUCore extends HTMLElement implements PUActions{
         }
     }
 }
-
-export interface PUCore extends PUProps{}
+type mixinProps = PUProps & OnMixinProps;
+export interface PUCore extends mixinProps {}
 const strProp: PropInfo ={
     type: 'String'
 }
@@ -184,7 +138,7 @@ ce.def({
             doInit:{
                 ifAllOf:['initVal']
             },
-            attachEventHandler:{
+            locateAndListen:{
                 ifKeyIn:['observe', 'capture'],
                 ifAllOf:['on']
             },
@@ -202,6 +156,7 @@ ce.def({
             display:'none'
         }
     },
+    mixins: [OnMixin],
     superclass: PUCore
 });
 

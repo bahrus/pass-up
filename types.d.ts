@@ -95,9 +95,7 @@ export interface PUProps{
 }
 
 export interface PUActions{
-    doEvent(self: this): void;
     doInit(self: this): void;
-    attachEventHandler(self: this): void;
     handleValChange(self: this): void;
     doSet(match: any, prop: string, lastVal: any): void;
     setAliases(self: this): void;

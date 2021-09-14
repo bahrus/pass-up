@@ -1,37 +1,15 @@
 import { CE } from 'trans-render/lib/CE.js';
 import { upSearch } from 'trans-render/lib/upSearch.js';
-import { getPreviousSib, nudge, getProp, convert } from 'on-to-me/on-to-me.js';
+import { getProp, convert } from 'on-to-me/on-to-me.js';
 import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
+import { OnMixin } from 'on-to-me/on-mixin.js';
 const ce = new CE();
 /**
  * @element p-u
  * @tag p-u
  */
 export class PUCore extends HTMLElement {
-    #wr;
-    get observedElement() {
-        const element = this.#wr?.deref();
-        if (element !== undefined) {
-            return element;
-        }
-        const elementToObserve = getPreviousSib(this.previousElementSibling, this.observe ?? null);
-        this.#wr = new WeakRef(elementToObserve);
-        return elementToObserve;
-    }
-    filterEvent(e) {
-        return true;
-    }
-    //https://web.dev/javascript-this/
-    handleEvent = (e) => {
-        if (this.ifTargetMatches !== undefined) {
-            if (!e.target.matches(this.ifTargetMatches))
-                return;
-        }
-        if (!this.filterEvent(e))
-            return;
-        this.lastEvent = e;
-    };
     valFromEvent(e) {
         let clearTarget = false;
         const val = this.val || 'target.value';
@@ -66,34 +44,6 @@ export class PUCore extends HTMLElement {
         //         setInitVal(self, elementToObserve);
         //     }, {once: true});
         // }
-    }
-    //TODO:  share common code with pass-down
-    attachEventHandler({ on, observe, observedElement, parentElement, ifTargetMatches, previousOn, handleEvent, capture }) {
-        const previousElementToObserve = this.#wr?.deref();
-        this.#wr = undefined;
-        const elementToObserve = this.observedElement;
-        if (!elementToObserve)
-            throw "Could not locate element to observe.";
-        let doNudge = false;
-        if ((previousElementToObserve !== undefined) && (previousOn !== undefined || (previousElementToObserve !== elementToObserve))) {
-            previousElementToObserve.removeEventListener(previousOn || on, handleEvent);
-        }
-        else {
-            doNudge = true;
-        }
-        elementToObserve.addEventListener(on, handleEvent, { capture: capture });
-        if (doNudge) {
-            if (elementToObserve === parentElement && ifTargetMatches) {
-                elementToObserve.querySelectorAll(ifTargetMatches).forEach(publisher => {
-                    nudge(publisher);
-                });
-            }
-            else {
-                nudge(elementToObserve);
-            }
-        }
-        this.setAttribute('status', '👂');
-        this.previousOn = on;
     }
     handleValChange = ({ lastVal, to, toNearestUpMatch, toHost, prop, debug, log }) => {
         if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined))
@@ -178,7 +128,7 @@ ce.def({
             doInit: {
                 ifAllOf: ['initVal']
             },
-            attachEventHandler: {
+            locateAndListen: {
                 ifKeyIn: ['observe', 'capture'],
                 ifAllOf: ['on']
             },
@@ -196,6 +146,7 @@ ce.def({
             display: 'none'
         }
     },
+    mixins: [OnMixin],
     superclass: PUCore
 });
 export const PassUp = ce.classDef;
