@@ -1,6 +1,6 @@
 import { CE } from 'trans-render/lib/CE.js';
 import { upSearch } from 'trans-render/lib/upSearch.js';
-import { getProp, convert } from 'on-to-me/on-to-me.js';
+import { getProp, convert } from 'on-to-me/prop-mixin.js';
 import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 import { OnMixin } from 'on-to-me/on-mixin.js';

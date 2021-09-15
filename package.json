@@ -3,10 +3,10 @@
   "version": "0.0.15",
   "description": "Glue DOM and Custom Elements together.",
   "keywords": [
-    "webc omponents",
-    "web component",
-    "custom elements",
-    "custom element",
+    "web-components",
+    "web-component",
+    "custom-elements",
+    "custom-element",
     "bind",
     "dom-bind"
   ],
@@ -35,8 +35,8 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.37",
-    "trans-render": "0.0.405"
+    "on-to-me": "0.0.39",
+    "trans-render": "0.0.406"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
