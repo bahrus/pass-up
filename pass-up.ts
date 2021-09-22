@@ -143,7 +143,8 @@ ce.def({
                 ifAllOf:['on']
             },
             handleValChange:{
-                ifAllOf:['lastVal', 'prop']
+                ifAllOf:['prop'],
+                ifKeyIn:['lastVal']
             },
             setValFromTarget:{
                 ifAllOf: ['valFromTarget'],

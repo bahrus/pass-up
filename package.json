@@ -35,8 +35,8 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.39",
-    "trans-render": "0.0.406"
+    "on-to-me": "0.0.40",
+    "trans-render": "0.0.409"
   },
   "devDependencies": {
     "@skypack/package-check": "0.2.2",
