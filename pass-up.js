@@ -45,8 +45,8 @@ export class PUCore extends HTMLElement {
         //     }, {once: true});
         // }
     }
-    handleValChange = ({ lastVal, to, toNearestUpMatch, toHost, prop, debug, log }) => {
-        if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined))
+    handleValChange = ({ lastVal, to, toNearestUpMatch, toHost, prop, debug, log, toSelf, fn }) => {
+        if (lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && !toHost && !toSelf))
             return;
         if (debug) {
             debugger;
@@ -65,12 +65,23 @@ export class PUCore extends HTMLElement {
         else if (toHost) {
             match = (this.getRootNode()).host;
         }
+        else if (toSelf) {
+            match = this.observedElement;
+        }
         if (match === null)
             return;
-        this.doSet(match, prop, lastVal);
+        if (prop !== undefined) {
+            this.doSet(match, prop, lastVal);
+        }
+        else if (fn !== undefined) {
+            this.doInvoke(match, fn, lastVal);
+        }
     };
     doSet(match, prop, lastVal) {
         match[prop] = lastVal;
+    }
+    doInvoke(match, fn, lastVal) {
+        match[fn](match, lastVal, this.lastEvent);
     }
     setInitVal({ initVal, parseValAs, cloneVal }, elementToObserve) {
         let val = getProp(elementToObserve, initVal.split('.'), this);
@@ -108,12 +119,13 @@ ce.def({
         tagName: 'p-u',
         propDefaults: {
             toHost: false, cloneVal: false, capture: false,
-            noblock: false, debug: false, log: false,
+            noblock: false, debug: false, log: false, toSelf: false,
         },
         propInfo: {
             on: strProp, to: strProp, toNearestUpMatch: strProp,
             prop: strProp, val: strProp, observe: strProp, initVal: strProp,
             parseValAs: strProp, previousOn: strProp, ifTargetMatches: strProp,
+            fn: strProp,
             lastVal: {
                 parse: false,
                 dry: false,

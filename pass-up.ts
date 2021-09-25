@@ -56,8 +56,8 @@ export class PUCore extends HTMLElement implements PUActions{
 
 
     
-    handleValChange = ({lastVal, to, toNearestUpMatch, toHost, prop, debug, log}: this) => {
-        if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && toHost === undefined)) return;
+    handleValChange = ({lastVal, to, toNearestUpMatch, toHost, prop, debug, log, toSelf, fn}: this) => {
+        if(lastVal === undefined || (to === undefined && toNearestUpMatch === undefined && !toHost && !toSelf)) return;
         if(debug){
             debugger;
         }else if(log){
@@ -71,14 +71,24 @@ export class PUCore extends HTMLElement implements PUActions{
             match = upSearch(this, toNearestUpMatch);
         }else if(toHost){
             match = (<any>(this.getRootNode())).host;
+        }else if(toSelf){
+            match = this.observedElement;
         }
         if(match === null) return;
-        this.doSet(match, prop!, lastVal);
+        if(prop !== undefined){
+            this.doSet(match, prop, lastVal);
+        }else if(fn !== undefined){
+            this.doInvoke(match, fn, lastVal);
+        }
         
     }
 
     doSet(match: any, prop: string, lastVal: any){
         match[prop] = lastVal;
+    }
+
+    doInvoke(match: any, fn: string, lastVal: any){
+        match[fn](match, lastVal, this.lastEvent);
     }
 
     setInitVal({initVal, parseValAs, cloneVal}: this, elementToObserve: Element){
@@ -118,12 +128,13 @@ ce.def({
         tagName: 'p-u',
         propDefaults:{
             toHost: false, cloneVal: false, capture: false,
-            noblock: false, debug: false, log: false,
+            noblock: false, debug: false, log: false, toSelf: false,
         },
         propInfo:{
             on: strProp, to: strProp, toNearestUpMatch: strProp,
             prop: strProp, val: strProp, observe: strProp, initVal: strProp,
             parseValAs: strProp, previousOn: strProp, ifTargetMatches: strProp,
+            fn: strProp,
             lastVal:{
                 parse: false,
                 dry: false,

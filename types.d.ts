@@ -15,9 +15,14 @@ export interface PUProps{
     to?: string;
 
     /**
-     * Pass property to custom element hosting the contents of p-u element.
+     * Pass property or invoke fn onto custom or built-in element hosting the contents of p-u element.
      */
     toHost?: boolean;
+
+    /**
+     * Pass property or invoke fn onto the 
+     */
+    toSelf?: boolean;
 
     /**
      * Pass property to the nearest previous sibling / ancestor element matching this css pattern, using .previousElement(s)/.parentElement.matches method. 
@@ -26,10 +31,15 @@ export interface PUProps{
     toNearestUpMatch?: string;
 
     /**
-     * Name of property to set on matching (upstream) siblings.
+     * Name of property to set on matching (upstream) element.
      * @attr
      */
     prop?: string;
+
+    /**
+     * Name of method or property arrow function to invoke on matching (upstream) element.
+     */
+    fn?: string;
 
     /**
      * Specifies path to JS object from event, that should be passed to downstream siblings.  Value of '.' passes entire entire object.
@@ -92,6 +102,8 @@ export interface PUProps{
     valFromTarget?: string;
 
     vft?: string;
+
+    //with-args
 }
 
 export interface PUActions{
