@@ -193,8 +193,7 @@ ce.def({
                 ifKeyIn: ['observe', 'capture', 'on', 'onPropChange'],
             },
             handleValChange: {
-                ifAllOf: ['prop'],
-                ifKeyIn: ['lastVal']
+                ifKeyIn: ['lastVal', 'prop', 'fn']
             },
             setValFromTarget: {
                 ifAllOf: ['valFromTarget'],
