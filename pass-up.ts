@@ -33,7 +33,7 @@ export class PUCore extends HTMLElement implements PUActions{
 
     doEvent({lastEvent, noblock}: this) {
         this.setAttribute('status', '🌩️');
-        if(!noblock) lastEvent!.stopPropagation();
+        if(!noblock && lastEvent!.stopPropagation) lastEvent!.stopPropagation();
         let valToPass = this.valFromEvent(lastEvent!);
         this.lastVal = valToPass;
         //holding on to lastEvent could introduce memory leak
