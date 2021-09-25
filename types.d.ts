@@ -105,7 +105,6 @@ export interface PUProps{
 
     withArgs: ('self' | 'val' | 'event')[];
 
-    onPropChange: string;
 }
 
 export interface PUActions{
