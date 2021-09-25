@@ -29,9 +29,8 @@ If using a static file web server with no bundling, the following entries are re
 <script type=importmap>
     {
         "imports": {
-        "xtal-element/": "../node_modules/xtal-element/",
-        "trans-render/": "../node_modules/trans-render/",
-        "on-to-me/": "../node_modules/on-to-me/"
+            "trans-render/": "../node_modules/trans-render/",
+            "on-to-me/": "../node_modules/on-to-me/"
         }
     }
 </script>
