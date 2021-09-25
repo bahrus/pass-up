@@ -104,9 +104,12 @@ export interface PUProps{
     vft?: string;
 
     withArgs: ('self' | 'val' | 'event')[];
+
+    onPropChange: string;
 }
 
 export interface PUActions{
+    doEvent(self: this): void;
     doInit(self: this): void;
     handleValChange(self: this): void;
     doSet(match: any, prop: string, lastVal: any): void;

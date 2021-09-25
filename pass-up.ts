@@ -13,8 +13,6 @@ const ce = new CE<PUProps & OnMixinProps, PUActions & OnMixinActions>();
  * @tag p-u
  */
 export class PUCore extends HTMLElement implements PUActions{
-
-
     valFromEvent(e: Event){
         let clearTarget = false;
         const val = this.val || 'target.value';
@@ -131,8 +129,42 @@ export class PUCore extends HTMLElement implements PUActions{
             valFromTarget: vft
         }
     }
+
+    attach(elementToObserve: Element, {on, handleEvent, onPropChange}: this){
+        if(on === undefined && onPropChange === undefined) return;
+        if(on !== undefined) {
+            Object.getPrototypeOf(this).attach(elementToObserve, this);
+            return;
+        }
+        let proto = elementToObserve;
+        let prop: PropertyDescriptor | undefined = Object.getOwnPropertyDescriptor(proto, onPropChange!);
+        while(proto && !prop){
+            proto = Object.getPrototypeOf(proto);
+            prop = Object.getOwnPropertyDescriptor(proto, on);
+        }
+        //let prop = Object.getOwnPropertyDescriptor(elementToObserve, on!);
+        if(prop === undefined){
+            throw {elementToObserve, on, message: "Can't find property."};
+        }
+        const setter = prop.set!.bind(elementToObserve);
+        const getter = prop.get!.bind(elementToObserve);
+        Object.defineProperty(elementToObserve, on!, {
+            get(){
+                return getter();
+            },
+            set(nv){
+                setter(nv);
+                const event = {
+                    target: this
+                };
+                handleEvent(event as Event);
+            },
+            enumerable: true,
+            configurable: true,
+        });        
+    }
 }
-type mixinProps = PUProps & OnMixinProps;
+type mixinProps = PUProps & OnMixinProps & OnMixinActions;
 export interface PUCore extends mixinProps {}
 const strProp: PropInfo ={
     type: 'String'
@@ -143,7 +175,7 @@ ce.def({
         propDefaults:{
             toHost: false, cloneVal: false, capture: false,
             noblock: false, debug: false, log: false, toSelf: false,
-            withArgs: ['self', 'val', 'event'],
+            withArgs: ['self', 'val', 'event'], onPropChange: ''
         },
         propInfo:{
             on: strProp, to: strProp, toNearestUpMatch: strProp,
@@ -165,8 +197,7 @@ ce.def({
                 ifAllOf:['initVal']
             },
             locateAndListen:{
-                ifKeyIn:['observe', 'capture'],
-                ifAllOf:['on']
+                ifKeyIn:['observe', 'capture', 'on', 'onPropChange'],
             },
             handleValChange:{
                 ifAllOf:['prop'],
