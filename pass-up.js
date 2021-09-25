@@ -109,7 +109,9 @@ export class PUCore extends HTMLElement {
         return true;
     }
     onFromProp(initVal) {
-        return this.on === undefined ? ce.toLisp(initVal) + '-changed' : this.on;
+        return this.onPropChange !== undefined ? this.on
+            : this.on === undefined ? ce.toLisp(initVal) + '-changed'
+                : this.on;
     }
     setValFromTarget({ valFromTarget }) {
         const initVal = valFromTarget === '' ? 'value' : valFromTarget;

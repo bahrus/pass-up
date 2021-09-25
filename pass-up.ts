@@ -113,7 +113,9 @@ export class PUCore extends HTMLElement implements PUActions{
     }
 
     onFromProp(initVal: string){
-        return this.on === undefined ? ce.toLisp(initVal) + '-changed': this.on;
+        return this.onPropChange !== undefined ? this.on
+            : this.on === undefined ? ce.toLisp(initVal) + '-changed'
+            : this.on;
     }
 
     setValFromTarget({valFromTarget}: this){
