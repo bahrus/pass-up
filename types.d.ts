@@ -103,7 +103,7 @@ export interface PUProps{
 
     vft?: string;
 
-    //with-args
+    withArgs: ('self' | 'val' | 'event')[];
 }
 
 export interface PUActions{

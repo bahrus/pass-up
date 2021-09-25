@@ -88,7 +88,21 @@ export class PUCore extends HTMLElement implements PUActions{
     }
 
     doInvoke(match: any, fn: string, lastVal: any){
-        match[fn](match, lastVal, this.lastEvent);
+        const args = [];
+        for(const arg of this.withArgs){
+            switch(arg){
+                case 'self':
+                    args.push(match);
+                    break;
+                case 'val':
+                    args.push(lastVal);
+                    break;
+                case 'event':
+                    args.push(this.lastEvent);
+                    break;
+            }
+        }
+        match[fn](...args);
     }
 
     setInitVal({initVal, parseValAs, cloneVal}: this, elementToObserve: Element){
@@ -129,6 +143,7 @@ ce.def({
         propDefaults:{
             toHost: false, cloneVal: false, capture: false,
             noblock: false, debug: false, log: false, toSelf: false,
+            withArgs: ['self', 'val', 'event'],
         },
         propInfo:{
             on: strProp, to: strProp, toNearestUpMatch: strProp,

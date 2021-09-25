@@ -81,7 +81,21 @@ export class PUCore extends HTMLElement {
         match[prop] = lastVal;
     }
     doInvoke(match, fn, lastVal) {
-        match[fn](match, lastVal, this.lastEvent);
+        const args = [];
+        for (const arg of this.withArgs) {
+            switch (arg) {
+                case 'self':
+                    args.push(match);
+                    break;
+                case 'val':
+                    args.push(lastVal);
+                    break;
+                case 'event':
+                    args.push(this.lastEvent);
+                    break;
+            }
+        }
+        match[fn](...args);
     }
     setInitVal({ initVal, parseValAs, cloneVal }, elementToObserve) {
         let val = getProp(elementToObserve, initVal.split('.'), this);
@@ -120,6 +134,7 @@ ce.def({
         propDefaults: {
             toHost: false, cloneVal: false, capture: false,
             noblock: false, debug: false, log: false, toSelf: false,
+            withArgs: ['self', 'val', 'event'],
         },
         propInfo: {
             on: strProp, to: strProp, toNearestUpMatch: strProp,
