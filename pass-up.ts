@@ -14,7 +14,6 @@ const ce = new CE<PUProps & OnMixinProps, PUActions & OnMixinActions>();
  */
 export class PUCore extends HTMLElement implements PUActions{
     valFromEvent(e: Event){
-        let clearTarget = false;
         const val = this.val || 'target.value';
         let valToPass = getProp(e, val.split('.'), this);
         
@@ -36,7 +35,6 @@ export class PUCore extends HTMLElement implements PUActions{
         if(!noblock && lastEvent!.stopPropagation) lastEvent!.stopPropagation();
         let valToPass = this.valFromEvent(lastEvent!);
         this.lastVal = valToPass;
-        //holding on to lastEvent could introduce memory leak
         
         this.setAttribute('status', '👂');
     }
