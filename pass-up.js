@@ -11,7 +11,6 @@ const ce = new CE();
  */
 export class PUCore extends HTMLElement {
     valFromEvent(e) {
-        let clearTarget = false;
         const val = this.val || 'target.value';
         let valToPass = getProp(e, val.split('.'), this);
         if (valToPass === undefined) {
@@ -32,7 +31,6 @@ export class PUCore extends HTMLElement {
             lastEvent.stopPropagation();
         let valToPass = this.valFromEvent(lastEvent);
         this.lastVal = valToPass;
-        //holding on to lastEvent could introduce memory leak
         this.setAttribute('status', '👂');
     }
     //TODO:  share common code with pass-down
