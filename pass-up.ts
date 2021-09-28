@@ -80,7 +80,12 @@ export class PUCore extends HTMLElement implements PUActions{
     }
 
     doSet(match: any, prop: string, lastVal: any){
-        match[prop] = lastVal;
+        if(this.plusEq){
+            match[prop] += lastVal;
+        }else{
+            match[prop] = lastVal;
+        }
+        
     }
 
     doInvoke(match: any, fn: string, lastVal: any){
@@ -141,7 +146,7 @@ ce.def({
         tagName: 'p-u',
         propDefaults:{
             toHost: false, cloneVal: false, capture: false,
-            noblock: false, debug: false, log: false, toSelf: false,
+            noblock: false, debug: false, log: false, toSelf: false, plusEq: false,
             withArgs: ['self', 'val', 'event'],
         },
         propInfo:{

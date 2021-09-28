@@ -105,6 +105,12 @@ export interface PUProps{
 
     withArgs: ('self' | 'val' | 'event')[];
 
+    plusEq: boolean;
+
+    eqConst: string;
+
+    toggle: boolean;
+
 }
 
 export interface PUActions{

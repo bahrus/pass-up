@@ -76,7 +76,12 @@ export class PUCore extends HTMLElement {
         }
     };
     doSet(match, prop, lastVal) {
-        match[prop] = lastVal;
+        if (this.plusEq) {
+            match[prop] += lastVal;
+        }
+        else {
+            match[prop] = lastVal;
+        }
     }
     doInvoke(match, fn, lastVal) {
         const args = [];
@@ -133,7 +138,7 @@ ce.def({
         tagName: 'p-u',
         propDefaults: {
             toHost: false, cloneVal: false, capture: false,
-            noblock: false, debug: false, log: false, toSelf: false,
+            noblock: false, debug: false, log: false, toSelf: false, plusEq: false,
             withArgs: ['self', 'val', 'event'],
         },
         propInfo: {
