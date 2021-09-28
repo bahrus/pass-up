@@ -107,9 +107,9 @@ export interface PUProps{
 
     plusEq: boolean;
 
-    eqConst: string;
+    eqConst: any;
 
-    toggle: boolean;
+    toggleProp: boolean;
 
 }
 

@@ -25,11 +25,20 @@ export class PUCore extends HTMLElement {
         }
         return this.cloneVal ? structuralClone(valToPass) : valToPass;
     }
-    doEvent({ lastEvent, noblock }) {
+    doEvent({ lastEvent, noblock, toggleProp, prop, eqConst }) {
         this.setAttribute('status', '🌩️');
         if (!noblock && lastEvent.stopPropagation)
             lastEvent.stopPropagation();
-        let valToPass = this.valFromEvent(lastEvent);
+        let valToPass = undefined;
+        if (toggleProp) {
+            valToPass = !this.observedElement[prop];
+        }
+        else if (eqConst !== undefined) {
+            valToPass = eqConst;
+        }
+        else {
+            valToPass = this.valFromEvent(lastEvent);
+        }
         this.lastVal = valToPass;
         this.setAttribute('status', '👂');
     }
@@ -78,6 +87,9 @@ export class PUCore extends HTMLElement {
     doSet(match, prop, lastVal) {
         if (this.plusEq) {
             match[prop] += lastVal;
+        }
+        else if (this.toggleProp) {
+            match[prop] = !match[prop];
         }
         else {
             match[prop] = lastVal;
@@ -138,12 +150,12 @@ ce.def({
         tagName: 'p-u',
         propDefaults: {
             toHost: false, cloneVal: false, capture: false,
-            noblock: false, debug: false, log: false, toSelf: false, plusEq: false,
+            noblock: false, debug: false, log: false, toSelf: false, plusEq: false, toggleProp: false,
             withArgs: ['self', 'val', 'event'],
         },
         propInfo: {
             on: strProp, onProp: strProp, to: strProp, toNearestUpMatch: strProp,
-            prop: strProp, val: strProp, observe: strProp, initVal: strProp,
+            prop: strProp, val: strProp, observe: strProp, initVal: strProp, eqConst: {},
             parseValAs: strProp, previousOn: strProp, ifTargetMatches: strProp,
             fn: strProp,
             lastVal: {
