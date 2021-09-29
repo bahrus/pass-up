@@ -116,7 +116,7 @@ export class PUCore extends HTMLElement implements PUActions{
     }
 
     setInitVal({initVal, parseValAs, cloneVal}: this, elementToObserve: Element){
-        let val = getProp(elementToObserve, initVal!.split('.'), this);
+        let val = getProp(elementToObserve, splitExt(initVal!), this);
         if(val === undefined) return false;
         if(parseValAs !== undefined) val = convert(val, parseValAs);
         if(cloneVal) val = structuralClone(val);

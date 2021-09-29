@@ -114,7 +114,7 @@ export class PUCore extends HTMLElement {
         match[fn](...args);
     }
     setInitVal({ initVal, parseValAs, cloneVal }, elementToObserve) {
-        let val = getProp(elementToObserve, initVal.split('.'), this);
+        let val = getProp(elementToObserve, splitExt(initVal), this);
         if (val === undefined)
             return false;
         if (parseValAs !== undefined)
