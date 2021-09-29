@@ -10,10 +10,12 @@ const ce = new CE();
  * @tag p-u
  */
 export class PUCore extends HTMLElement {
+    _splitExt;
     valFromEvent(e) {
         const val = this.val || 'target.value';
-        const splitX = splitExt(val);
-        let valToPass = getProp(e, splitX, this);
+        if (this._splitExt === undefined)
+            this._splitExt = splitExt(val);
+        let valToPass = getProp(e, this._splitExt, this);
         if (valToPass === undefined) {
             const target = e.target;
             const attribVal = target.getAttribute(val);

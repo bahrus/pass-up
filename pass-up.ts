@@ -13,10 +13,11 @@ const ce = new CE<PUProps & OnMixinProps, PUActions & OnMixinActions>();
  * @tag p-u
  */
 export class PUCore extends HTMLElement implements PUActions{
+    _splitExt: (string | string[])[] | undefined;
     valFromEvent(e: Event){
         const val = this.val || 'target.value';
-        const splitX = splitExt(val);
-        let valToPass = getProp(e, splitX, this);
+        if(this._splitExt === undefined) this._splitExt = splitExt(val);
+        let valToPass = getProp(e, this._splitExt, this);
         
         if(valToPass === undefined){
             const target = e.target as HTMLElement;
