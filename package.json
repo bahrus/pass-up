@@ -35,7 +35,7 @@
     "url": "git+https://github.com/bahrus/pass-up.git"
   },
   "dependencies": {
-    "on-to-me": "0.0.43",
+    "on-to-me": "0.0.45",
     "trans-render": "0.0.414"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 import { CE } from 'trans-render/lib/CE.js';
 import { upSearch } from 'trans-render/lib/upSearch.js';
-import { getProp, convert } from 'on-to-me/prop-mixin.js';
+import { getProp, convert, splitExt } from 'on-to-me/prop-mixin.js';
 import { structuralClone } from 'trans-render/lib/structuralClone.js';
 import { upShadowSearch } from 'trans-render/lib/upShadowSearch.js';
 import { OnMixin } from 'on-to-me/on-mixin.js';
@@ -12,7 +12,8 @@ const ce = new CE();
 export class PUCore extends HTMLElement {
     valFromEvent(e) {
         const val = this.val || 'target.value';
-        let valToPass = getProp(e, val.split('.'), this);
+        const splitX = splitExt(val);
+        let valToPass = getProp(e, splitX, this);
         if (valToPass === undefined) {
             const target = e.target;
             const attribVal = target.getAttribute(val);
